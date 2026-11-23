@@ -4,9 +4,10 @@ import school.coda.remy_axel_ethan.projet_java.tools.Case;
 import static school.coda.remy_axel_ethan.projet_java.tools.Grille.GRID_SIZE;
 
 public class BoardRules {
-//    private BoardRules() {
-//        /* This utility class should not be instantiated */
-//    }
+
+    private BoardRules() {
+        throw new IllegalStateException("Utility class");
+    }
 
 
     public static boolean isInGrid(int x, int y, int size, boolean isHorizontal) {
