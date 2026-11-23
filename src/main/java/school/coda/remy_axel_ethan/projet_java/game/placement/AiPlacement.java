@@ -11,10 +11,15 @@ import static school.coda.remy_axel_ethan.projet_java.tools.Grille.GRID_SIZE;
 
 public class AiPlacement {
     private final Case[][] aiCases;
-    private final Random rand = new Random();
+    private final Random rand;
 
     public AiPlacement(Case[][] aiCases) {
+        this(aiCases, new Random());
+    }
+
+    public AiPlacement(Case[][] aiCases, Random rand) {
         this.aiCases = aiCases;
+        this.rand = rand;
     }
 
     public void placeAllBoats() {
