@@ -1,79 +1,89 @@
 package school.coda.remy_axel_ethan.projet_java.game.placement;
 
 import org.junit.jupiter.api.Test;
+import school.coda.remy_axel_ethan.projet_java.boat.Boat;
+import school.coda.remy_axel_ethan.projet_java.boat.BoatType;
+import school.coda.remy_axel_ethan.projet_java.tools.Case;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static school.coda.remy_axel_ethan.projet_java.tools.Grille.GRID_SIZE;
+import static school.coda.remy_axel_ethan.projet_java.game.placement.GridTestBuilder.aGrid;
 
 class BoardRulesTest {
 
     @Test
-    void shouldReturnTrueWhenHorizontalShipFitsInsideGrid() {
+    void shouldReturnTrueWhenAllHorizontalCasesAreFree() {
         // Arrange
-        int x = 0;
-        int y = 0;
-        int shipSize = 3;
+        Case[][] grid = aGrid().build();
 
         // Act
-        boolean result = BoardRules.isInGrid(x, y, shipSize, true);
+        boolean result = BoardRules.isCasesFree(0, 0, 3, true, grid);
 
         // Assert
         assertThat(result).isTrue();
     }
 
     @Test
-    void shouldReturnTrueWhenHorizontalShipReachesRightBorderExactly() {
+    void shouldReturnFalseWhenHorizontalPathContainsOccupiedCase() {
         // Arrange
-        int shipSize = 3;
-        int x = GRID_SIZE - shipSize;
-        int y = 0;
+        Case[][] grid = aGrid()
+                .withOccupiedCase(2, 0)
+                .build();
 
         // Act
-        boolean result = BoardRules.isInGrid(x, y, shipSize, true);
-
-        // Assert
-        assertThat(result).isTrue();
-    }
-
-    @Test
-    void shouldReturnFalseWhenHorizontalShipExceedsRightBorder() {
-        // Arrange
-        int shipSize = 3;
-        int x = GRID_SIZE - shipSize + 1;
-        int y = 0;
-
-        // Act
-        boolean result = BoardRules.isInGrid(x, y, shipSize, true);
+        boolean result = BoardRules.isCasesFree(0, 0, 3, true, grid);
 
         // Assert
         assertThat(result).isFalse();
     }
 
     @Test
-    void shouldReturnTrueWhenVerticalShipReachesBottomBorderExactly() {
+    void shouldReturnTrueWhenAllVerticalCasesAreFree() {
         // Arrange
-        int shipSize = 4;
-        int x = 0;
-        int y = GRID_SIZE - shipSize;
+        Case[][] grid = aGrid().build();
 
         // Act
-        boolean result = BoardRules.isInGrid(x, y, shipSize, false);
+        boolean result = BoardRules.isCasesFree(4, 2, 4, false, grid);
 
         // Assert
         assertThat(result).isTrue();
     }
 
     @Test
-    void shouldReturnFalseWhenVerticalShipExceedsBottomBorder() {
+    void shouldReturnFalseWhenVerticalPathContainsOccupiedCase() {
         // Arrange
-        int shipSize = 4;
-        int x = 0;
-        int y = GRID_SIZE - shipSize + 1;
+        Case[][] grid = aGrid()
+                .withOccupiedCase(4, 5)
+                .build();
 
         // Act
-        boolean result = BoardRules.isInGrid(x, y, shipSize, false);
+        boolean result = BoardRules.isCasesFree(4, 2, 4, false, grid);
 
         // Assert
         assertThat(result).isFalse();
+    }
+
+    @Test
+    void shouldReturnFalseFromIsntCaseValideWhenCaseIsEmpty() {
+        // Arrange
+        Case emptyCase = new Case(0, 0, "player");
+
+        // Act
+        boolean result = BoardRules.isntCaseValide(emptyCase);
+
+        // Assert
+        assertThat(result).isFalse();
+    }
+
+    @Test
+    void shouldReturnTrueFromIsntCaseValideWhenCaseIsOccupied() {
+        // Arrange
+        Case occupiedCase = new Case(0, 0, "player");
+        occupiedCase.setOccupiedBy(new Boat(BoatType.values()[0]));
+
+        // Act
+        boolean result = BoardRules.isntCaseValide(occupiedCase);
+
+        // Assert
+        assertThat(result).isTrue();
     }
 }
