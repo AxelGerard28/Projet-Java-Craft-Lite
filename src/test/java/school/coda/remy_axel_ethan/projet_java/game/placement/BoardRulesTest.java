@@ -5,6 +5,8 @@ import school.coda.remy_axel_ethan.projet_java.boat.Boat;
 import school.coda.remy_axel_ethan.projet_java.boat.BoatType;
 import school.coda.remy_axel_ethan.projet_java.tools.Case;
 
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import static org.assertj.core.api.Assertions.assertThat;
 import static school.coda.remy_axel_ethan.projet_java.game.placement.GridTestBuilder.aGrid;
 
@@ -85,5 +87,22 @@ class BoardRulesTest {
 
         // Assert
         assertThat(result).isTrue();
+    }
+
+    @ParameterizedTest(name = "x={0}, y={1}, size={2}, horizontal={3} => inGrid={4}")
+    @CsvSource({
+            "0, 0, 3, true, true",
+            "7, 0, 3, true, true",
+            "8, 0, 3, true, false",
+            "0, 0, 4, false, true",
+            "0, 6, 4, false, true",
+            "0, 7, 4, false, false"
+    })
+    void shouldCheckIfShipFitsInGrid(int x, int y, int size, boolean isHorizontal, boolean expected) {
+        // Arrange & Act
+        boolean result = BoardRules.isInGrid(x, y, size, isHorizontal);
+
+        // Assert
+        assertThat(result).isEqualTo(expected);
     }
 }
